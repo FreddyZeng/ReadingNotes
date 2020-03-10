@@ -2,7 +2,7 @@
 
 
 
-## NSObject+MemoryLeak它的职责就是处理是否触发内存泄漏的逻辑，
+NSObject+MemoryLeak它的职责就是处理是否触发内存泄漏的逻辑
 
 ```
 - (BOOL)willDealloc {
@@ -26,9 +26,9 @@
 
 ```
 
+
+
 来到 assertNotDealloc 方法 MLeakedObjectProxy的职责是用NSSet来储存2秒后还没销毁的对象地址（保存对象的地址不会造成内存泄漏）
-
-
 
 ```
 - (void)assertNotDealloc {
@@ -42,9 +42,9 @@
 }
 ```
 
+
+
 来到addLeakedObject方法，它主要是创建一个MLeakedObjectProxy和有内存泄漏的对象进行一一对应映射。并且代理对象弱引用持有内存泄漏对象，而内存泄漏对象强引用持有代理对象。
-
-
 
 ```
 + (void)addLeakedObject:(id)object {
@@ -71,9 +71,9 @@
 }
 ```
 
+
+
 所以当内存泄漏的对象销毁的时候，内向泄漏对象，就会把它强引用持有的代理对象销毁，这时和内存泄漏对象的隐射代理对象就会销毁，会调用dealloc，这时就把这个内存泄漏地址的地址，从NSSet中移除。
-
-
 
 ```
 - (void)dealloc {
@@ -87,7 +87,9 @@
 }
 ```
 
-到这里，我们就明白了，从内存泄漏的逻辑判断，到内存泄漏的提示和保存，还有内存泄漏对象它释放后，也会检测得到。
+从上面看到，我们就明白了，从内存泄漏的逻辑判断，到内存泄漏的提示和保存，还有内存泄漏对象它释放后，也会检测得到。
+
+
 
 接下来，我们再看，它是如何开始触发内存泄漏计算的，
 
@@ -105,6 +107,8 @@
 ```
 
 从上面的swizzleSEL逻辑可以看到，它就是检测页面消失触发内存泄漏计算的。然后走，内存泄漏逻辑。
+
+
 
 ```
 [self swizzleSEL:@selector(setView:) withSEL:@selector(swizzled_setView:)];
