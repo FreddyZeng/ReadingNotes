@@ -343,6 +343,22 @@ obj->clearDeallocating();// 把对象从内存管理的表中删除
 
 
 
+objc_destructInstance 是不会free释放内存的，他是在object_dispose(id obj)里面释放内存
+
+```
+object_dispose(id obj)
+{
+    if (!obj) return nil;
+
+    objc_destructInstance(obj);    
+    free(obj);
+
+    return nil;
+}
+```
+
+
+
 阅读这个delloc的收获
 
 1. 知道内存的释放有debug时不释放内存的nonpointer
