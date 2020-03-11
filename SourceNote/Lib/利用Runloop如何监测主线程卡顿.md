@@ -104,3 +104,5 @@ timeoutCount是计算超时的次数，如果累计连续3次Runloop事件循环
 3. 选用信号量的dispatch_semaphore_wait来设置超时计算逻辑，这样可以很好的计算Runloop的状态，到底停留了多久，而且可以自己修改控制。
 
 在滑动TableView的时候，主Runloop处于UITrackingRunLoopMode，如果监听主线程Runloop是UITrackingRunLoopMode，这个时候我们就不往主线程添加任务，我们就可以尽量避免CPU占用率太高了。可以创建一个队列，累积任务，等主线程Runloop不处于UITrackingRunLoopMode的时候，再添加到主队列中去
+
+使用CADisplayLink来计算卡顿并不准确，https://juejin.im/post/5a53346e518825732b19ae51
