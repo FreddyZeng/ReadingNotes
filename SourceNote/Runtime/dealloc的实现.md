@@ -57,6 +57,15 @@ objc_object::rootDealloc()
    if (isTaggedPointer()) return;  // fixme necessary?
 ```
 
+苹果引入了isTaggedPointer内存优化技术，大概就是把变量的标记和值，都放在在一个地址上。
+
+```
+在2013年9月，苹果推出了iPhone5s，与此同时，iPhone5s配备了首个采用64位架构的A7双核处理器，为了节省内存和提高执行效率，苹果提出了Tagged Pointer的概念。对于64位程序，引入Tagged Pointer后，相关逻辑能减少一半的内存占用，以及3倍的访问速度提升，100倍的创建、销毁速度提升。
+
+https://halfrost.com/objc_runtime_isa_class/
+https://www.infoq.cn/article/deep-understanding-of-tagged-pointer/
+```
+
    fastpath的表达式的值为1，就是true，而slowpath的表达式是0才是true。展开是 __builtin_expect，它是基于编译器对汇编进行优化条件分支的,并且提高准确，https://stackoverflow.com/questions/7346929/what-is-the-advantage-of-gccs-builtin-expect-in-if-else-statements  		
 
 ```objective-c
@@ -70,14 +79,6 @@ objc_object::rootDealloc()
       			  initIsa(cls, false/*not nonpointer*/, false);
 			...
   		
-```
-
-另外苹果引入了内存优化技术，64位机器的指针是8个字节，32位的指针是4个字节。TaggedPointer是使用前4个字节作为
-
-```
-在2013年9月，苹果推出了iPhone5s，与此同时，iPhone5s配备了首个采用64位架构的A7双核处理器，为了节省内存和提高执行效率，苹果提出了Tagged Pointer的概念。对于64位程序，引入Tagged Pointer后，相关逻辑能减少一半的内存占用，以及3倍的访问速度提升，100倍的创建、销毁速度提升。
-
-https://halfrost.com/objc_runtime_isa_class/
 ```
 
 
