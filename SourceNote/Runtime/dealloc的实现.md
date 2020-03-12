@@ -57,8 +57,7 @@ objc_object::rootDealloc()
    if (isTaggedPointer()) return;  // fixme necessary?
 ```
 
-   fastpath的表达式的值为1，就是true，而slowpath的表达式是0才是true。展开是 __builtin_expect，它是基于编译器对汇编进行优化条件分支的,并且提高准确，https://stackoverflow.com/questions/7346929/what-is-the-advantage-of-gccs-builtin-expect-in-if-else-statements
-  		
+   fastpath的表达式的值为1，就是true，而slowpath的表达式是0才是true。展开是 __builtin_expect，它是基于编译器对汇编进行优化条件分支的,并且提高准确，https://stackoverflow.com/questions/7346929/what-is-the-advantage-of-gccs-builtin-expect-in-if-else-statements  		
 
 ```objective-c
   		nonpointer
@@ -71,6 +70,14 @@ objc_object::rootDealloc()
       			  initIsa(cls, false/*not nonpointer*/, false);
 			...
   		
+```
+
+另外苹果引入了内存优化技术，64位机器的指针是8个字节，32位的指针是4个字节。TaggedPointer是使用前4个字节作为
+
+```
+在2013年9月，苹果推出了iPhone5s，与此同时，iPhone5s配备了首个采用64位架构的A7双核处理器，为了节省内存和提高执行效率，苹果提出了Tagged Pointer的概念。对于64位程序，引入Tagged Pointer后，相关逻辑能减少一半的内存占用，以及3倍的访问速度提升，100倍的创建、销毁速度提升。
+
+https://halfrost.com/objc_runtime_isa_class/
 ```
 
 
@@ -158,6 +165,8 @@ storeWeak(id *location, objc_object *newObj)
 
 ###  has_assoc
 
+表示该对象是否有 C++ 或者 Objc 的析构器
+
 has_assoc的赋值 跟 weakly_referenced逻辑大致一样，最上层函数，也是runtime函数
 
 ```
@@ -204,7 +213,10 @@ void _object_set_associative_reference(id object, void *key, id value, uintptr_t
 }
 ```
 
-### 	has_cxx_dtor 和has_sidetable_rc 都是一样的，大致逻辑差不多
+### 	has_cxx_dtor 和has_sidetable_rc 赋值也是可以从代码中找到
+
+has_cxx_dtor表示该对象是否有 C++ 或者 Objc 的析构器
+has_sidetable_rc 是判断该对象的引用计数是否过大，如果过大则需要其他散列表来进行存储。
 
 ```
 newisa.has_cxx_dtor = hasCxxDtor;
@@ -373,3 +385,5 @@ runtime有很多汇编的代码，我只是了解r0作为返回值，r1-r4是参
 顺便也了解到，fish hook的原理。就是对符号地址的替换。
 
 如果上面的总结有错误，请指教，谢谢
+
+参考 https://halfrost.com/objc_runtime_isa_class/
