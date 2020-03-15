@@ -8,7 +8,9 @@
 
 [dealloc的实现](SourceNote/Runtime/dealloc的实现.md)
 
-[微信MLeaksFinder源码阅读](SourceNote/Lib/微信MLeaksFinder源码阅读.md)
+[微信MLeaksFinder源码阅读](SourceNote/Lib/微信MLeaksFinder源码阅读.md)它的循环引用的获取是使用FBRetainCycleDetector的
+
+[FBRetainCycleDetector源码阅读](SourceNote/Lib/FBRetainCycleDetector.md)
 
 [RxSwiftDemo中的小例子源码解析](SourceNote/RxSwift/RxSwiftDemo中的小例子源码解析.md)
 
