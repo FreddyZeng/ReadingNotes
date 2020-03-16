@@ -238,6 +238,60 @@ static NSIndexSet *_GetBlockStrongLayout(void *block) {
 }
 ```
 
+
+
+### Block闭包释放内存
+
+Block闭包捕抓普通对象释放
+
+```
+void __block_dispose_4(struct __block_literal_4 *src) {
+     // was _Block_destroy
+     _Block_object_dispose(src->existingBlock, BLOCK_FIELD_IS_BLOCK);
+}
+```
+
+Block闭包捕抓C++对象释放
+
+```
+void __block_dispose_10(struct __block_literal_10 *src) {
+     FOO_dtor(&src->foo);
+}
+```
+
+Block闭包捕抓普通OC对象，为什么_Block_object_dispose 就一定会调用OC对象的Release呢？[可以从这里获得它的实现](https://opensource.apple.com/source/libclosure/libclosure-74/runtime.cpp.auto.html)
+
+```
+// When Blocks or Block_byrefs hold objects their destroy helper routines call this entry point
+// to help dispose of the contents
+void _Block_object_dispose(const void *object, const int flags) {
+    switch (os_assumes(flags & BLOCK_ALL_COPY_DISPOSE_FLAGS)) {
+      case BLOCK_FIELD_IS_BYREF | BLOCK_FIELD_IS_WEAK:
+      case BLOCK_FIELD_IS_BYREF:
+        // get rid of the __block data structure held in a Block
+        _Block_byref_release(object);
+        break;
+      case BLOCK_FIELD_IS_BLOCK:
+        _Block_release(object);
+        break;
+      case BLOCK_FIELD_IS_OBJECT:
+        _Block_release_object(object);// 从这里可以看到，它是会调用Release
+        break;
+      case BLOCK_BYREF_CALLER | BLOCK_FIELD_IS_OBJECT:
+      case BLOCK_BYREF_CALLER | BLOCK_FIELD_IS_BLOCK:
+      case BLOCK_BYREF_CALLER | BLOCK_FIELD_IS_OBJECT | BLOCK_FIELD_IS_WEAK:
+      case BLOCK_BYREF_CALLER | BLOCK_FIELD_IS_BLOCK  | BLOCK_FIELD_IS_WEAK:
+        break;
+      default:
+        break;
+    }
+}
+```
+
+
+
+### Block自行编译生成C++代码
+
 可以自行测试编译Block 的代码，生成C++的实现 [这有详细的实现](http://clang.llvm.org/docs/Block-ABI-Apple.html)
 
 ```
