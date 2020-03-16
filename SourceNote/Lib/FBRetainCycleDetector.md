@@ -348,5 +348,49 @@ int main(int argc, char * argv[]) {
 
 ## FBObjectiveCNSCFTimer  普通OC对象的强引用获取
 
+```
+typedef struct {
+  long _unknown; // This is always 1
+  id target;
+  SEL selector;
+  NSDictionary *userInfo;
+} _FBNSCFTimerInfoStruct;
 
+- (NSSet *)allRetainedObjects
+{
+  // Let's retain our timer
+  __attribute__((objc_precise_lifetime)) NSTimer *timer = self.object;
 
+  if (!timer) {
+    return nil;
+  }
+
+  NSMutableSet *retained = [[super allRetainedObjects] mutableCopy];
+
+  CFRunLoopTimerContext context;
+  CFRunLoopTimerGetContext((CFRunLoopTimerRef)timer, &context);
+
+  // If it has a retain function, let's assume it retains strongly
+  if (context.info && context.retain) {
+    _FBNSCFTimerInfoStruct infoStruct = *(_FBNSCFTimerInfoStruct *)(context.info);// 为什么这么确定这个结构体的内存布局呢？我查了runtime源码，没发现这个info，就一定是上面的结构体。它有可能是个函数。
+    if (infoStruct.target) {
+      FBObjectiveCGraphElement *element = FBWrapObjectGraphElementWithContext(self, infoStruct.target, self.configuration, @[@"target"]);
+      if (element) {
+        [retained addObject:element];
+      }
+    }
+    if (infoStruct.userInfo) {
+      FBObjectiveCGraphElement *element = FBWrapObjectGraphElementWithContext(self, infoStruct.userInfo, self.configuration, @[@"userInfo"]);
+      if (element) {
+        [retained addObject:element];
+      }
+    }
+  }
+
+  return retained;
+}
+```
+
+从上面看到主要是从runloop中获取CFRunLoopTimerGetContext的context，然后去到info结构体，再去到target和字典信息
+
+真的想知道这个info，为什么是这样的布局。我们只能够创建一个demo创建定时器，并且通过LLDB 正则断点CFRunLoopTimerContext，然后查看这个定时器context的内存值，看看是不是定时器实例对象的地址了。很多时候，看源码，要看懂，然后再问自己，为什么作者可以这么写，他是根据什么得出来的。这样可以拓展我们的思维，以后遇到类似问题，也可以参考。
