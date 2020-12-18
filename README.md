@@ -20,6 +20,8 @@ Hello
 
 [Vue知识点](Learn/WebMobileTips/vue.md)
 
+[jQuery笔记](Learn/WebMobileTips/jQuery.md)
+
 ## iOS
 
 ## 学习技巧
