@@ -22,6 +22,8 @@ Hello
 
 [jQuery笔记](Learn/WebMobileTips/jQuery.md)
 
+[前端博客资源](Learn/WebMobileTips/前端开发者优质blog.md)
+
 ## iOS
 
 ## 学习技巧
