@@ -22,6 +22,10 @@ Hello
 
 [jQuery笔记](Learn/WebMobileTips/jQuery.md)
 
+[前端icon优化](Learn/WebMobileTips/前端Icon优化.md)
+
+[CSS的浏览器兼容](Learn/WebMobileTips/CSS浏览器兼容.md)
+
 [前端博客资源](Learn/WebMobileTips/前端开发者优质blog.md)
 
 ## iOS
