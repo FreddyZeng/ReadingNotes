@@ -26,6 +26,10 @@ Hello
 
 [CSS的浏览器兼容](Learn/WebMobileTips/CSS浏览器兼容.md)
 
+[前端模块定义和导入](Learn/WebMobileTips/前端模块化.md)
+
+[gulp脚本（其实很简单，还是记录）](Learn/WebMobileTips/gulp.md)
+
 [前端博客资源](Learn/WebMobileTips/前端开发者优质blog.md)
 
 ## iOS
