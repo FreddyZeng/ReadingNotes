@@ -32,6 +32,13 @@ Hello
 
 [前端博客资源](Learn/WebMobileTips/前端开发者优质blog.md)
 
+**微前端MicroFrontends**
+
+本质上就是按业务或者功能来隔离代码，以前就是把JS模块化（如AMD,CMD,ES6-import），现在是要把HTML+CSS+JS按照一定的业务来模块化，暂且称为**微应用**吧（小程序的感觉？）。微应用它们之间是可以相互引用的，使用<Script标签来加载对应的微应用模块>，或者直接HTML链接给其它微应用跳转过来。还在深入了解，如果没有微前端会怎么样呢？也就是传说写代码思路，应该是所有业务代码都在一个工程，一个小改动需要整个工程都部署。
+
+- https://juejin.cn/post/6844903953734336525#heading-22
+- https://martinfowler.com/articles/micro-frontends.html
+
 ## iOS
 
 ## 学习技巧
