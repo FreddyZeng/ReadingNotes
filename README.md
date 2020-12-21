@@ -39,6 +39,7 @@ Hello
 - https://juejin.cn/post/6844903953734336525#heading-22
 - https://martinfowler.com/articles/micro-frontends.html
 - https://tech.meituan.com/2020/02/27/meituan-waimai-micro-frontends-practice.html
+- https://github.com/phodal/microfrontends
 
 ## iOS
 
