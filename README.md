@@ -66,3 +66,5 @@ Hello
 
 [程序员的自我修养-链接、转载与库](BookNote/程序员的自我修养.pdf)
 
+[Mac OSX and iOS OSX internals-To the apples Core（深入解析Mac OS X & iOS 操作系统）笔记](BookNote/Mac OSX and iOS OSX internals-To the apples Core.md)
+
